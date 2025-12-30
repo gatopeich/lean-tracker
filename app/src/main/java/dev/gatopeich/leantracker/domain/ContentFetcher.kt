@@ -37,6 +37,7 @@ class ContentFetcher {
     private fun extractContent(html: String, selector: String, regex: String?): String {
         val doc: Document = Jsoup.parse(html)
         
+        // Support both CSS selectors and simple XPath
         val elements = if (selector.startsWith("//")) {
             // XPath support would require additional library
             // For minimal implementation, convert simple XPath to CSS
@@ -46,9 +47,10 @@ class ContentFetcher {
             doc.select(selector)
         }
         
+        // Extract text from all matching elements
         var content = elements.joinToString("\n") { it.text() }
         
-        // Apply regex if provided
+        // Apply regex filter if provided
         regex?.let {
             val pattern = Regex(it)
             content = pattern.findAll(content)

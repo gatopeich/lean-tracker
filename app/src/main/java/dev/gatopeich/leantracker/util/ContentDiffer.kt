@@ -9,6 +9,7 @@ import androidx.compose.ui.text.withStyle
 
 object ContentDiffer {
     fun createDiff(oldContent: String?, newContent: String): AnnotatedString {
+        // If no old content, everything is new (green)
         if (oldContent == null) {
             return buildAnnotatedString {
                 withStyle(SpanStyle(color = Color(0xFF00AA00))) {
@@ -20,6 +21,7 @@ object ContentDiffer {
         val oldLines = oldContent.lines()
         val newLines = newContent.lines()
         
+        // Simple line-by-line diff with color coding
         return buildAnnotatedString {
             var oldIndex = 0
             var newIndex = 0
@@ -27,27 +29,27 @@ object ContentDiffer {
             while (oldIndex < oldLines.size || newIndex < newLines.size) {
                 when {
                     oldIndex >= oldLines.size -> {
-                        // Added lines
+                        // Added lines (green)
                         withStyle(SpanStyle(color = Color(0xFF00AA00))) {
                             append("+ ${newLines[newIndex]}\n")
                         }
                         newIndex++
                     }
                     newIndex >= newLines.size -> {
-                        // Removed lines
+                        // Removed lines (red)
                         withStyle(SpanStyle(color = Color(0xFFAA0000))) {
                             append("- ${oldLines[oldIndex]}\n")
                         }
                         oldIndex++
                     }
                     oldLines[oldIndex] == newLines[newIndex] -> {
-                        // Unchanged lines
+                        // Unchanged lines (default color)
                         append("  ${oldLines[oldIndex]}\n")
                         oldIndex++
                         newIndex++
                     }
                     else -> {
-                        // Changed lines
+                        // Changed lines (show both old and new)
                         withStyle(SpanStyle(color = Color(0xFFAA0000))) {
                             append("- ${oldLines[oldIndex]}\n")
                         }

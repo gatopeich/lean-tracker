@@ -3,12 +3,12 @@ package dev.gatopeich.leantracker.util
 import okhttp3.Cookie
 
 object CookieManager {
-    // Known authentication cookie patterns
+    // Known authentication cookie patterns (session, auth tokens, etc.)
     private val authCookiePatterns = listOf(
         "session", "auth", "token", "login", "user", "account", "jwt", "sid"
     )
     
-    // Known tracking cookie patterns
+    // Known tracking cookie patterns (analytics, advertising, etc.)
     private val trackingCookiePatterns = listOf(
         "_ga", "_gid", "_fbp", "_gcl", "utm_", "tracking", "analytics"
     )

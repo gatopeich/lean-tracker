@@ -32,7 +32,7 @@ class ContentCheckWorker(
             val items = repository.getAllItemsList()
             
             items.forEach { item ->
-                // Check if it's time to poll this item
+                // Check if it's time to poll this item based on its interval
                 val now = System.currentTimeMillis()
                 val intervalMs = item.intervalHours * 60 * 60 * 1000L
                 val lastChecked = item.lastCheckedAt ?: 0L
@@ -51,19 +51,21 @@ class ContentCheckWorker(
     }
     
     private suspend fun checkItem(item: dev.gatopeich.leantracker.data.TrackedItem) {
+        // Load auth cookies if available for this domain
         val authCookie = database.authCookieDao().getByDomain(getDomain(item.url))
         val cookies = authCookie?.cookies
         
         val newContent = fetcher.fetchContent(item, cookies) ?: return
         
+        // Check if content has changed significantly
         val hasChange = ContentDiffer.hasSignificantChange(item.lastContent, newContent)
         
         if (hasChange && item.lastContent != null) {
-            // Notify user
+            // Notify user of the change
             sendNotification(item.name, item.id)
         }
         
-        // Update item
+        // Update item with new content and timestamp
         repository.updateItem(
             item.copy(
                 lastContent = newContent,

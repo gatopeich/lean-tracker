@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Lean Tracker</string>
+    <string name="track_new">Track New</string>
+    <string name="tracked_items">Tracked Items</string>
+    <string name="no_items">No tracked items yet</string>
+    <string name="share_url_hint">Share a URL from your browser to start tracking</string>
+    <string name="url_label">URL</string>
+    <string name="name_label">Name</string>
+    <string name="selector_label">Selector</string>
+    <string name="regex_label">Regex (optional)</string>
+    <string name="interval_label">Check Interval (hours)</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="select_element">Select Element</string>
+    <string name="visual_select">Visual Select</string>
+    <string name="last_checked">Last checked: %1$s</string>
+    <string name="never_checked">Never checked</string>
+    <string name="content_changed">Content changed!</string>
+    <string name="view_diff">View Diff</string>
+    <string name="change_detected">Change detected in %1$s</string>
+    <string name="notification_channel_name">Content Changes</string>
+    <string name="notification_channel_desc">Notifications for tracked content changes</string>
+    <string name="login">Login</string>
+    <string name="authentication_required">Authentication Required</string>
+    <string name="tap_to_select">Tap on an element to select it</string>
+    <string name="selector_found">Selector: %1$s</string>
+    <string name="select_similar">Select all similar elements</string>
+    <string name="confirm_selection">Confirm Selection</string>
+    <string name="error_loading">Error loading content</string>
+    <string name="checking">Checking…</string>
+</resources>

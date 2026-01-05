@@ -20,23 +20,38 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
         
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v3
-      with:
-        gradle-version: 8.2
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
         
-    - name: Build debug APK
-      run: gradle assembleDebug --stacktrace
-      
-    - name: Build release APK
-      run: gradle assembleRelease --stacktrace
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        gradle-version: wrapper
+        
+    - name: Make gradlew executable
+      run: chmod +x gradlew || true
+        
+    - name: Build with Gradle
+      run: |
+        if [ -f "gradlew" ] && [ -x "gradlew" ]; then
+          ./gradlew assembleDebug assembleRelease --stacktrace
+        else
+          echo "Gradle wrapper not found or not executable, using gradle command"
+          gradle assembleDebug assembleRelease --stacktrace
+        fi
       
     - name: Run lint checks
-      run: gradle lintDebug --stacktrace
+      run: |
+        if [ -f "gradlew" ] && [ -x "gradlew" ]; then
+          ./gradlew lintDebug --stacktrace
+        else
+          gradle lintDebug --stacktrace
+        fi
       continue-on-error: true
       
     - name: Upload debug APK
       uses: actions/upload-artifact@v4
+      if: always()
       with:
         name: app-debug
         path: app/build/outputs/apk/debug/app-debug.apk
@@ -44,6 +59,7 @@ jobs:
         
     - name: Upload release APK
       uses: actions/upload-artifact@v4
+      if: always()
       with:
         name: app-release
         path: app/build/outputs/apk/release/app-release.apk

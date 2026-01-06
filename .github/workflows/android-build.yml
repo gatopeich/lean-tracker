@@ -25,28 +25,15 @@ jobs:
         
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
-      with:
-        gradle-version: wrapper
         
     - name: Make gradlew executable
-      run: chmod +x gradlew || true
+      run: chmod +x gradlew
         
-    - name: Build with Gradle
-      run: |
-        if [ -f "gradlew" ] && [ -x "gradlew" ]; then
-          ./gradlew assembleDebug assembleRelease --stacktrace
-        else
-          echo "Gradle wrapper not found or not executable, using gradle command"
-          gradle assembleDebug assembleRelease --stacktrace
-        fi
+    - name: Build with Gradle Wrapper
+      run: ./gradlew assembleDebug assembleRelease --stacktrace
       
     - name: Run lint checks
-      run: |
-        if [ -f "gradlew" ] && [ -x "gradlew" ]; then
-          ./gradlew lintDebug --stacktrace
-        else
-          gradle lintDebug --stacktrace
-        fi
+      run: ./gradlew lintDebug --stacktrace
       continue-on-error: true
       
     - name: Upload debug APK

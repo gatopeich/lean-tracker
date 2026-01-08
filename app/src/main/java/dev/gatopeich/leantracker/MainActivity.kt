@@ -62,7 +62,8 @@ fun LeanTrackerApp(
     sharedUrl: String? = null,
     notificationItemId: Long? = null
 ) {
-    val database = remember { AppDatabase.getDatabase(androidx.compose.ui.platform.LocalContext.current) }
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val database = remember(context) { AppDatabase.getDatabase(context) }
     val mainViewModel: MainViewModel = viewModel { MainViewModel(database) }
     val addEditViewModel: AddEditViewModel = viewModel { AddEditViewModel(database) }
     val detailViewModel: DetailViewModel = viewModel { DetailViewModel(database) }

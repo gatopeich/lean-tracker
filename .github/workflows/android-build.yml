@@ -1,0 +1,53 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ "main" ]  # Only build on push to main
+  pull_request:
+    branches: [ "main" ]  # Build on PRs to main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+        
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+        
+    - name: Make gradlew executable
+      run: chmod +x gradlew
+        
+    - name: Build debug APK
+      run: ./gradlew assembleDebug --stacktrace
+      
+    - name: Run lint checks
+      run: ./gradlew lintDebug --stacktrace
+      continue-on-error: true
+      
+    - name: Upload debug APK
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: app-debug
+        path: app/build/outputs/apk/debug/app-debug.apk
+        retention-days: 30
+        
+    - name: Upload lint results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: lint-results
+        path: app/build/reports/lint-results-debug.html
+        retention-days: 7

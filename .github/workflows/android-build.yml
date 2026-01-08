@@ -29,8 +29,12 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x gradlew
         
-    - name: Build with Gradle Wrapper
-      run: ./gradlew assembleDebug assembleRelease --stacktrace
+    - name: Build debug APK
+      run: ./gradlew assembleDebug --stacktrace
+      
+    - name: Build release APK
+      if: github.event_name == 'push'
+      run: ./gradlew assembleRelease --stacktrace
       
     - name: Run lint checks
       run: ./gradlew lintDebug --stacktrace
@@ -46,7 +50,7 @@ jobs:
         
     - name: Upload release APK
       uses: actions/upload-artifact@v4
-      if: always()
+      if: github.event_name == 'push' && always()
       with:
         name: app-release
         path: app/build/outputs/apk/release/app-release.apk

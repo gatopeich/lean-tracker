@@ -2,14 +2,9 @@ name: Android CI
 
 on:
   push:
-    branches: [ "main", "copilot/**" ]
+    branches: [ "main" ]  # Only build on push to main
   pull_request:
-    branches: [ "main" ]
-
-# Prevent duplicate runs for PRs from branches in the same repo
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+    branches: [ "main" ]  # Build on PRs to main
 
 jobs:
   build:
